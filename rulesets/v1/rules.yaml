@@ -1,0 +1,20 @@
+version: "1.0.0"
+rules:
+  - key: jurisdiction_not_sanctioned
+    type: yaml-list-contains
+    params:
+      field: jurisdiction
+      denylist: [ "KP", "IR", "SY", "CU", "RU" ]
+    on_fail:
+      outcome: "NeedsReview"
+      risk_score: "High"
+      message: "Jurisdiction appears on sanctions denylist."
+  - key: amount_threshold
+    type: numeric-threshold
+    params:
+      field: amount
+      max: 100000.0
+    on_fail:
+      outcome: "NeedsReview"
+      risk_score: "Medium"
+      message: "Contract value exceeds auto-approve threshold."
